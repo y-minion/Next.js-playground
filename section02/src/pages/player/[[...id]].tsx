@@ -1,8 +1,7 @@
-//URL변수도 쿼리파람과 마찬가지로 객체를 불러온다.
 import { useRouter } from "next/router";
 
 export default function Page() {
   const router = useRouter();
   const { id } = router.query;
-  return <h1>Book {id}</h1>;
+  return <h1>Player 화면 입니다.플레이어 id:{id}</h1>;
 }
