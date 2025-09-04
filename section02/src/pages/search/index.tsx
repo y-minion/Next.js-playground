@@ -1,5 +1,7 @@
 //쿼리 파람을 사용하기 위해 useRouter를 호출해 객체를 사용해야한다.
+import SearchableLayout from "@/components/searchable-layout";
 import { useRouter } from "next/router";
+import { ReactNode } from "react";
 
 export default function Search() {
   const router = useRouter();
@@ -7,3 +9,7 @@ export default function Search() {
   const { q } = router.query;
   return <h1>search 화면 {q}</h1>;
 }
+
+Search.getLayout = (page: ReactNode) => {
+  return <SearchableLayout>{page}</SearchableLayout>;
+};
