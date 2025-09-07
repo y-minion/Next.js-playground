@@ -1,17 +1,27 @@
 //URL변수도 쿼리파람과 마찬가지로 객체를 불러온다.
-import { useRouter } from "next/router";
-import books from "@/mock/books.json";
 import style from "./[Id].module.css";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import fetchOneBook from "@/lib/fetch-one-books";
 
-export default function Page() {
-  const router = useRouter();
-  const { id } = router.query;
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const id = context.params!.id;
+  const book = await fetchOneBook(id as string);
+  console.log(book);
+  return {
+    props: {
+      book,
+    },
+  };
+};
 
-  if (!id) {
-    return null;
-  }
-  const { title, subTitle, coverImgUrl, description, author, publisher } =
-    books[Number(id) - 1];
+export default function Page({
+  book,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  if (!book) return null;
+
+  const { title, subTitle, coverImgUrl, description, author, publisher } = book;
   return (
     <div className={style.container}>
       <div
