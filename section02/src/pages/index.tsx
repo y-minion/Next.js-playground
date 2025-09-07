@@ -46,6 +46,7 @@ export default function Home({
   );
 }
 
+//공통 컴포넌트는 원하는 컴포넌트의 프로퍼티에 추가, 그리고 _app파일에서 따로 렌더링 로직 추가한다.
 Home.getLayout = (page: ReactNode) => {
   return <SearchableLayout>{page}</SearchableLayout>;
 };

@@ -14,6 +14,7 @@ export default function App({
 }: AppProps & {
   Component?: NextPageWithLayout;
 }) {
+  //공통 레이아웃 렌더링을 원하는 컴포넌트에는 getLayout이라는 프로퍼티를 추가한 상태임. 해당 로직에서 공통 레이아웃 속성을 렌더링한다.
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>;
 }
