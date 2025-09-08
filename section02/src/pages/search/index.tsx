@@ -28,6 +28,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 export default function SearchPage() {
   const [books, setBooks] = useState<BookDate[]>([]);
 
+  //쿼리파람은 사전에 미리 알 수 없기 때문에 SSG가 불가능하다. 그래서 CSR으로 처리해줘야 한다.
   const router = useRouter();
   const q = router.query.q;
 
