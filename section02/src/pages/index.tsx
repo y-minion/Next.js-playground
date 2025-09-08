@@ -18,7 +18,10 @@ export const getStaticProps = async () => {
       allBooks,
       randomBooks,
     },
+    /*
+    //ISR 추가 설정. -> SSG로 불러온 정적 페이지를 ISR로 3초마다 서버로 부터 갱신 하도록 해 새롭게 업데이트된 페이지를 렌더링 한다
     revalidate: 3,
+    */
   };
 };
 
