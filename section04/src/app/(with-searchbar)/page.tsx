@@ -3,7 +3,9 @@ import style from "./page.module.css";
 import { BookData } from "@/types";
 
 const AllBooks = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     return <div>오류가 발생 했습니다...</div>;
   }
@@ -21,7 +23,8 @@ const AllBooks = async () => {
 
 const RecoBooks = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`,
+    { next: { revalidate: 3 } }
   );
   if (!res.ok) {
     return <div>오류가 발생 했습니다...</div>;
