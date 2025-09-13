@@ -1,6 +1,21 @@
 import "./globals.css";
 import Link from "next/link";
 import style from "./layout.module.css";
+import { BookData } from "@/types";
+
+async function Footer() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`, {
+    cache: "force-cache",
+  });
+  const books: BookData[] = await res.json();
+  const bookCount = books.length;
+  return (
+    <footer>
+      <div>제작 @winterlood</div>
+      <div>{bookCount}개의 도서가 등록 되어 있습니다.</div>
+    </footer>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -16,7 +31,7 @@ export default function RootLayout({
             <Link href={"/"}>📚 ONEBITE BOOKS</Link>
           </header>
           <main>{children}</main>
-          <footer>제작 @winterlood</footer>
+          <Footer />
         </div>
       </body>
     </html>
