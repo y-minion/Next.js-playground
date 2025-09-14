@@ -1,5 +1,6 @@
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
+import delay from "util/delay";
 
 export default async function Page({
   searchParams,
@@ -7,6 +8,7 @@ export default async function Page({
   //서버 컴포넌트 페이지에서 자동으로 받는 현재 페이지의 쿼리스트링
   searchParams: Promise<{ q?: string }>;
 }) {
+  delay(1500);
   const { q } = await searchParams;
 
   const res = await fetch(
