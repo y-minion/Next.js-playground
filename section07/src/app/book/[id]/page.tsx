@@ -44,7 +44,8 @@ async function BookDetail({ bookId }: { bookId: string }) {
 
 async function ReviewList({ bookId }: { bookId: string }) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } }
   );
   if (!response.ok) {
     //이미 error.tsx파일을 설정했기 때문에 에러 발생시 에러를 던지기만 하면 넥스트가 에러페이지를 렌더링 시켜준다

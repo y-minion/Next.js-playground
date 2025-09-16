@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 //서버에서만 실행이 되도록 만들어주는 지시자를 사용한다.
 
@@ -23,7 +23,7 @@ export default async function createReviewAction(formData: FormData) {
       }
     );
     //패치가 성공적으로 이루어 지면 해당 페이지를 새롭게 만들어서 클라이언트에 보내준다
-    revalidatePath(`/book/${bookId}`);
+    revalidateTag(`review-${bookId}`);
     console.log(response);
   } catch (err) {
     console.error(err);
