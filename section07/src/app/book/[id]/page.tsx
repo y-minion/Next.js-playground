@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-import createReviewAction from "@/actions/create-review.action";
+import ReviewEditor from "@/components/review-editor";
+import { ReviewData } from "@/types";
+import ReviewItem from "@/components/review-item";
 
 //미리 빌드 시점에 존재할 url파라미터를 넥스트 서버에 전달해준다. 이렇게 되면 빌드 시점에 미리 전달한 url파라미터에 대한 페이지들이 만들어 진다.
 export function generateStaticParams() {
@@ -40,17 +42,20 @@ async function BookDetail({ bookId }: { bookId: string }) {
   );
 }
 
-function ReviewEditor({ bookId }: { bookId: string }) {
+async function ReviewList({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`
+  );
+  if (!response.ok) {
+    //이미 error.tsx파일을 설정했기 때문에 에러 발생시 에러를 던지기만 하면 넥스트가 에러페이지를 렌더링 시켜준다
+    throw new Error(`Review fetch failed : ${response.statusText}`);
+  }
+  const reviews: ReviewData[] = await response.json();
   return (
     <section>
-      {/* 폼이 제출될때 서버에서 실행되는 함수를 action을 통해 전달한다 */}
-      <form action={createReviewAction}>
-        {/* Input의 모든 항목을 입력해야 제출 할 수 있도록 한다 */}
-        <input name="bookId" value={bookId} hidden readOnly />
-        <input required name="content" placeholder="리뷰 내용" />
-        <input required name="author" placeholder="작성자" />
-        <button type="submit">작성하기</button>
-      </form>
+      {reviews.map((review) => {
+        return <ReviewItem key={`review-item-${review.id}`} {...review} />;
+      })}
     </section>
   );
 }
@@ -65,6 +70,7 @@ export default async function Page({
     <div className={style.container}>
       <BookDetail bookId={id} />
       <ReviewEditor bookId={id} />
+      <ReviewList bookId={id} />
     </div>
   );
 }
