@@ -39,7 +39,7 @@ async function BookDetail({ bookId }: { bookId: string }) {
   );
 }
 
-function ReviewEditor() {
+function ReviewEditor({ bookId }: { bookId: string }) {
   async function createReviewAction(formData: FormData) {
     "use server"; //서버에서만 실행이 되도록 만들어주는 지시자를 사용한다.
     console.log("server action called");
@@ -49,15 +49,31 @@ function ReviewEditor() {
     const content = formData.get("content")?.toString();
     const author = formData.get("author")?.toString();
 
-    console.log(content, author);
+    //서버측에서 클라이언트에 비어있는 항목이 있으면 올바르지 않은 요청으로 판단하여 종료한다
+    if (!content || !author) return;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review`,
+        {
+          method: "POST",
+          body: JSON.stringify({ bookId, content, author }),
+        }
+      );
+
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+      return;
+    }
   }
 
   return (
     <section>
       {/* 폼이 제출될때 서버에서 실행되는 함수를 action을 통해 전달한다 */}
       <form action={createReviewAction}>
-        <input name="content" placeholder="리뷰 내용" />
-        <input name="author" placeholder="작성자" />
+        {/* Input의 모든 항목을 입력해야 제출 할 수 있도록 한다 */}
+        <input required name="content" placeholder="리뷰 내용" />
+        <input required name="author" placeholder="작성자" />
         <button type="submit">작성하기</button>
       </form>
     </section>
@@ -73,7 +89,7 @@ export default async function Page({
   return (
     <div className={style.container}>
       <BookDetail bookId={id} />
-      <ReviewEditor />
+      <ReviewEditor bookId={id} />
     </div>
   );
 }
