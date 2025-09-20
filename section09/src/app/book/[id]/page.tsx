@@ -3,6 +3,7 @@ import style from "./page.module.css";
 import ReviewEditor from "@/components/review-editor";
 import { ReviewData } from "@/types";
 import ReviewItem from "@/components/review-item";
+import Image from "next/image";
 
 //미리 빌드 시점에 존재할 url파라미터를 넥스트 서버에 전달해준다. 이렇게 되면 빌드 시점에 미리 전달한 url파라미터에 대한 페이지들이 만들어 진다.
 export function generateStaticParams() {
@@ -30,7 +31,12 @@ async function BookDetail({ bookId }: { bookId: string }) {
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
       >
-        <img src={coverImgUrl} />
+        <Image
+          src={coverImgUrl}
+          width={240}
+          height={300}
+          alt="책 커버 이미지"
+        />
       </div>
       <div className={style.title}>{title}</div>
       <div className={style.subTitle}>{subTitle}</div>
