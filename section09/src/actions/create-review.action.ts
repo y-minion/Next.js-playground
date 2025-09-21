@@ -1,6 +1,5 @@
 "use server";
 import { revalidateTag } from "next/cache";
-import delay from "util/delay";
 
 //서버에서만 실행이 되도록 만들어주는 지시자를 사용한다.
 //useActionState 훅을 사용하면 해당 훅이 반환하는 상태 값(첫번째 변수)이 첫번째 매개변수로 전달이 된다. 하지만 현재 서버액션 함수에서는 사용하지 않으므로 언더바 처리한다.
@@ -17,7 +16,6 @@ export default async function createReviewAction(_: any, formData: FormData) {
   if (!bookId || !content || !author)
     return { status: false, error: "리뷰내용과 작성자를 입력해 주세요" };
   try {
-    await delay(2000);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review`,
       {
