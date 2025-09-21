@@ -6,8 +6,18 @@ import ReviewItem from "@/components/review-item";
 import Image from "next/image";
 
 //미리 빌드 시점에 존재할 url파라미터를 넥스트 서버에 전달해준다. 이렇게 되면 빌드 시점에 미리 전달한 url파라미터에 대한 페이지들이 만들어 진다.
-export function generateStaticParams() {
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+// 빌드 시점에 모든 도서의 id를 fetch를 통해 불러와서 관련 페이지를 모두 생성하도록 한다.
+export async function generateStaticParams() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+  const books: BookData[] = await res.json();
+  return books.map(({ id }) => {
+    return {
+      id: id.toString(),
+    };
+  });
 }
 
 async function BookDetail({ bookId }: { bookId: string }) {
